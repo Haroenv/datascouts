@@ -1,0 +1,29 @@
+{
+    "api": {
+        "port": 8080,
+        "token": "TOKEN_FOR_API",
+        "dirLogs": "./logs"
+    },
+    "db": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "password": "pwd",
+        "db": 0
+    },
+    
+    "twitter" : {
+        "key" : "C2dLHNC4yxUGBOMg8m2ukV3eg",
+        "secret" : "tUty4n4W93baGfMdKcWoZ6tqkVk4BcS49xv9JtIMH2aUfMbAR0",
+        "accessToken" : "882512935939174400-Hkv7q6bBWzE12D4dX6DCXN47b6WJrzU",
+        "accessTokenSecret" : "BFuxfWVFXvgK9aGdPkcxms46qX4UDn5jEC3I02EPuvrFM",
+        "timeout" : 60,
+        "mock" : {
+            "node" : [
+                    
+            ],
+            "osoc" : [
+                
+            ]
+        } 
+    },
+}

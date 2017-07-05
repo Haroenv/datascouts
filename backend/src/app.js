@@ -22,6 +22,7 @@
 const Config = require('config');
 const Koa = require('koa');
 const KMorgan  = require("koa-morgan");
+const KCORS = require('koa-cors');
 
 // const Promise = require('bluebird');
 
@@ -30,6 +31,7 @@ const KMorgan  = require("koa-morgan");
 
 // Mine
 const RootRoute = require("./routes/root");
+const TwitterRoute = require("./routes/twitter");
 
 // -------------------------------------------------------------------
 // Properties
@@ -37,11 +39,21 @@ const RootRoute = require("./routes/root");
 
 const app = new Koa()
 
-app.use(RootRoute.routes())
-app.use(RootRoute.allowedMethods())
+// All routes related to /
+app.use(RootRoute.routes());
+app.use(RootRoute.allowedMethods());
+
+// All routes related to /twitter
+app.use(TwitterRoute.routes());
+app.use(TwitterRoute.allowedMethods());
+
 
 
 app.use(KMorgan('short'));
+
+app.use(KCORS());
+
+
 
 app.listen(Config.api.port);
 

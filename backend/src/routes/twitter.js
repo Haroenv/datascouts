@@ -36,15 +36,13 @@ router.get('/q/:keyword',async (ctx, next) => {
   console.log(ctx.params.keyword);
   return T.get('search/tweets', { q: ctx.params.keyword, count: 7 })
   .then(function({data}) {
-    console.log(typeof data.statuses)
     ctx.body = data.statuses.map((tweet, i) => {
-      console.log(i);
       let res = {
         'created_at' : tweet.created_at,
         'body' : tweet.text,
         'hastags' : tweet.entities.hashtags.map(h => h.text),
-        'user' : tweet.user.name,
-        'user_screen_name' : tweet.user.screen_name,
+        'user' : tweet.user.screen_name,
+        'user_full_name' : tweet.user.name,
         'retweet_count' : tweet.retweet_count,
         'favorite_count' : tweet.favorite_count,
       };

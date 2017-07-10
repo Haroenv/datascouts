@@ -10,6 +10,14 @@
         "password": "pwd",
         "db": 0
     },
+    
+    "twitter" : {
+        "key" : "TWITTER_API_KEY",
+        "secret" : "TWITTER_API_SECRET",
+        "accessToken" : "TWITTER_API_ACCESS_TOKEN",
+        "accessTokenSecret" : "TWITTER_ACCESS_TOKEN_SECRET",
+        "timeout" : 60
+    },
 
     "zen": [
         "Two bytes meet. The first byte asks, 'Are you ill?' The second byte replies, 'No, just feeling a bit off.'",

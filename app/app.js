@@ -38,19 +38,20 @@ new Vue({
 
   },
   methods: {
-    fetchData: function(medium) {
-      var u = this.url + medium + '/q/' + this.currentEntity + '?limit=' + this.limit
+    fetchData: function(mediaFilter) {
+      var u = this.url + mediaFilter + '/q/' + this.currentEntity + '?limit=' + this.limit
       if(this.currentEntity=='mockdata'){
         u = this.mockDataTwitter
       }
       this.isLoading = true
       document.getElementById("wf-container").style.visibility = "hidden"
-      console.log(this.isLoading)
       this.$http({url: u, method: 'GET' }).then(function (response) {
           this.items = response.data
+          this.isLoading = false
           //console.log(response)
         }, function (response) {
-          console.log("Error Fail to get tasks")
+          console.log("Error Fail to get data")
+          this.isLoading = false
       });
 
     },
@@ -68,7 +69,6 @@ new Vue({
         }
         this.currentEntity=this.newEntity
       }
-      console.log(this.currentEntity)
       this.fetchData('twitter')
       this.newEntity=''
     },
@@ -80,8 +80,6 @@ new Vue({
     },
     updateWaterfall: _.debounce(
         function() {
-          this.isLoading = false
-          console.log(this.isLoading)
           this.waterfall.compose(true)
           document.getElementById("wf-container").style.visibility = "visible"
         },

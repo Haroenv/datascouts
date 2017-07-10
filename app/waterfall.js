@@ -14,6 +14,8 @@
 }(this, function () {
     'use strict';
     var Waterfall = function(opts) {
+      this.deleteEmptyColumns()
+
       // define property
       var minBoxWidth;
       Object.defineProperty(this, 'minBoxWidth', {
@@ -26,16 +28,7 @@
         }
       });
 
-      opts = opts || {};
-      var containerSelector = opts.containerSelector || '.wf-container';
-      var boxSelector = opts.boxSelector || '.wf-box';
-
-      // init properties
-      this.minBoxWidth = opts.minBoxWidth || 250;
-      this.columns = [];
-      this.container = document.querySelector(containerSelector);
-      this.boxes = this.container ?
-          Array.prototype.slice.call(this.container.querySelectorAll(boxSelector)) : [];
+      this.opts = opts
 
       // compose once in constructor
       this.compose();
@@ -62,10 +55,15 @@
     // compute the number of columns under current setting
     Waterfall.prototype.computeNumberOfColumns = function() {
       var num = Math.floor(this.container.clientWidth / this.minBoxWidth);
+      if(num<3){num=3;}
       num = num || 1; // at least one column
 
       return num;
     };
+
+    Waterfall.prototype.updateBoxes = function() {
+      this.boxes = document.getElementsByClassName('wf-box');
+    }
 
     // init enough columns and set the width
     Waterfall.prototype.initColumns = function(num) {
@@ -127,6 +125,18 @@
 
     // compose core
     Waterfall.prototype.compose = function(force) {
+
+      var opts = this.opts || {};
+      var containerSelector = opts.containerSelector || '.wf-container';
+      var boxSelector = opts.boxSelector || '.wf-box';
+
+      // init properties
+      this.minBoxWidth = opts.minBoxWidth || 250;
+      this.columns = [];
+      this.container = document.querySelector(containerSelector);
+      this.boxes = this.container ?
+          Array.prototype.slice.call(this.container.querySelectorAll(boxSelector)) : [];
+
       var num = this.computeNumberOfColumns();
       var cols = this.columns.length;
 
@@ -146,7 +156,6 @@
           this.addBox(box);
         }
       }
-      this.deleteEmptyColumns()
     };
 
     // add a new box to grid

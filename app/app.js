@@ -1,5 +1,11 @@
 new Vue({
   el:'#vue-app',
+  /*http: {
+    root: '/root',
+    headers: {
+      Authorization: 'Basic YXBpOnBhc3N3b3Jk'
+    }
+  },*/
   data: {
     items: [],
     socialMediaFilters: [
@@ -19,8 +25,9 @@ new Vue({
     newEntity: '',
     currentEntity: '',
     entities: [],
-    waterfall: new Waterfall(),
+    waterfall: new Waterfall(200),
     waterfallIsCreated: false,
+    isLoading: false,
     limit: 20,
     vueIsWorking: 'Hurray, Vue is working!'
   },
@@ -31,25 +38,21 @@ new Vue({
 
   },
   methods: {
-    fetchData: function (medium) {
-      var xhr = new XMLHttpRequest()
-      var self = this
+    fetchData: function(medium) {
       var u = this.url + medium + '/q/' + this.currentEntity + '?limit=' + this.limit
-      if(self.currentEntity=='mockdata'){
-        u = self.mockDataTwitter
+      if(this.currentEntity=='mockdata'){
+        u = this.mockDataTwitter
       }
-      xhr.open('GET', u)
-      xhr.onload = function () {
-        //console.log(xhr.responseText)
-        self.items = JSON.parse(xhr.responseText)
+      this.isLoading = true
+      document.getElementById("wf-container").style.visibility = "hidden"
+      console.log(this.isLoading)
+      this.$http({url: u, method: 'GET' }).then(function (response) {
+          this.items = response.data
+          //console.log(response)
+        }, function (response) {
+          console.log("Error Fail to get tasks")
+      });
 
-      }
-      xhr.send()
-      /*xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4){
-              storeData()
-            }
-      }*/
     },
     addEntity: function (e) {
       e.preventDefault()
@@ -65,6 +68,7 @@ new Vue({
         }
         this.currentEntity=this.newEntity
       }
+      console.log(this.currentEntity)
       this.fetchData('twitter')
       this.newEntity=''
     },
@@ -76,8 +80,11 @@ new Vue({
     },
     updateWaterfall: _.debounce(
         function() {
-          this.waterfall = new Waterfall()
+          this.isLoading = false
+          console.log(this.isLoading)
+          this.waterfall.compose(true)
+          document.getElementById("wf-container").style.visibility = "visible"
         },
-      600)
-  }
+      1)
+    }
 })

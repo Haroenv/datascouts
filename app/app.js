@@ -20,7 +20,7 @@ new Vue({
       {year: 2016,
       active: false}
     ],
-    url: 'http://datascouts.be/api/v1',
+    url: 'https://osoc-2017-datascouts-backend-akad1070.c9users.io/api/v1',
     mockDataTwitter: 'http://www.json-generator.com/api/json/get/ckwxgssyXm?indent=2',
     entities: ['osoc','tesla','spacex', 'apple'],
     selectedEntities: [],
@@ -64,7 +64,8 @@ new Vue({
     },
     addEntity: function (entity, e) {
       e.preventDefault()
-      this.$http.post(this.url + '/entities', JSON.stringify(entity)).then(function (response) {
+      console.log(entity)
+      this.$http.post(this.url + '/entities/', {"name" : entity}).then(function (response) {
           console.log("Entity added")
           //console.log(response)
         }, function (response) {
@@ -94,9 +95,7 @@ new Vue({
     },
     loadEntities: function() {
       this.$http.get(this.url + '/entities').then(function (response) {
-        for(var i=0;i<response.data.length;i++){
-          this.entities = response.data
-        }
+        this.entities = response.data.map(e => e.name);
 
           //console.log(response)
         }, function (response) {

@@ -13,47 +13,45 @@
     <div id="vue-app">
       <!--SIDENAV-->
       <div id="sidenav" class="sidenav">
-        <div class="content">
-            {{vueIsWorking}}
-            <img src="content/img/datascouts_logo.svg" alt="Datascouts Logo"/>
+        <div class="sidenav_entities">
+          <div class="content">
+              {{vueIsWorking}}
+              <img src="content/img/datascouts_logo.svg" alt="Datascouts Logo"/>
 
-            <!--FILTERS-->
-            <h1>Filters</h1>
-            <hr>
+              <form >
+                  <input type="text" placeholder="Enter entity to search for" v-model="searchEntity"/>
+              </form>
 
-            <!--list of social media filters, change bool with checkbox-->
-            <form action="" class="filter">
-                <h2>Social media</h2>
-                <template v-for="item in socialMediaFilters">
-                  <label class="control control--checkbox" >
-                      {{item.name}}
-                      <input type="checkbox" checked="checked" name="item.name"
-                      v-model="item.active"/>
-                      <div class="control__indicator"></div>
-                      {{item.active}}
-                  </label>
+              <div class="searchedEntities">
+                <template v-for="item in entities">
+                  <button type="button" v-on:click="selectEntity(item,$event)"
+                  v-if=" (item.indexOf(searchEntity) !== -1 || searchEntity == '')">
+                    {{item}}
+                  </button>
                 </template>
-            </form>
+                <button type="button" v-on:click="addEntity(searchEntity, $event)" v-if="searchEntity != ''">create {{searchEntity}}</button>
+              </div>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
 
-            <!--list of filters by date, change bool with checkbox-->
-            <form action="" class="filter">
-                <h2>Year</h2>
-                <template v-for="item in dateFilters">
-                  <label class="control control--checkbox" >
-                      {{ item.year }}
-                      <input type="checkbox" checked="checked" name="item.year"
-                      v-model="item.active"/>
-                      <div class="control__indicator"></div>
-                      {{ item.active }}
-                  </label>
-                </template>
-            </form>
-
+          </div>
+        </div>
+        <div id="sidenav_handles" class="sidenav_handles">
+          <div class="content">
+            <button type="button" v-on:click="editEntity(currentEntity, $event)">edit {{currentEntity}}</button>
+            <button type="button" v-on:click="deleteEntity(currentEntity, $event)">delete {{currentEntity}}</button>
+          </div>
         </div>
       </div>
 
+
       <div id="main">
         <div class="content">
+          <button type="button" v-on:click="fetchData">fetch data (this button is only for testing)</button>
           <div class="template" v-if="isLoading">
               <h1>loading...</h1>
               <div class="template_box">
@@ -146,26 +144,6 @@
         </div>
       </div>
 
-      <div class="sidenav-right">
-        <div class="content">
-              <h1>Search for your entity</h1>
-              <form >
-                  <input type="text" placeholder="Enter entity to search for" v-model="newEntity"/>
-                  <button type="submit" value="Add new entity" v-on:click="addEntity">Add entity</button>
-                </form>
-              <hr>
-              <form action="" class="filter">
-                  <h2>Entities</h2>
-                  <ul>
-                    <template v-for="item in entities">
-                        <li>
-                            <button type="button" value="item" v-on:click="selectEntity(item,$event)">{{item}}</button>
-                        </li>
-                    </template>
-                  </ul>
-              </form>
-          </div>
-      </div>
     </div>
     <script src="app/waterfall.js"></script>
     <script src="app/lodash.min.js"></script>

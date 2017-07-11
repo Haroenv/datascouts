@@ -20,68 +20,94 @@ new Vue({
       {year: 2016,
       active: false}
     ],
-    url: 'https://osoc-2017-datascouts-akad1070.c9users.io/',
+    url: 'http://datascouts.be/api/v1',
     mockDataTwitter: 'http://www.json-generator.com/api/json/get/ckwxgssyXm?indent=2',
-    newEntity: '',
+    entities: ['osoc','tesla','spacex', 'apple'],
+    selectedEntities: [],
+    searchEntity: '',
     currentEntity: '',
-    entities: [],
+    selected: false,
     waterfall: new Waterfall(200),
     waterfallIsCreated: false,
     isLoading: false,
-    limit: 20,
     vueIsWorking: 'Hurray, Vue is working!'
   },
   watch: {
     items: function(updatingWfContainer){
       this.updateWaterfall()
     }
-
+  },
+  mounted: function() {
+    this.loadEntities()
   },
   methods: {
-    fetchData: function(mediaFilter) {
-      var u = this.url + mediaFilter + '/q/' + this.currentEntity + '?limit=' + this.limit
-      if(this.currentEntity=='mockdata'){
-        u = this.mockDataTwitter
-      }
+    fetchData: function(entities) {
+      //display load templates, hide loading elements
       this.isLoading = true
       document.getElementById("wf-container").style.visibility = "hidden"
-      this.$http({url: u, method: 'GET' }).then(function (response) {
+
+      this.$http.get(this.mockDataTwitter).then(function (response) {
           this.items = response.data
-          this.isLoading = false
           //console.log(response)
         }, function (response) {
           console.log("Error Fail to get data")
-          this.isLoading = false
       });
 
+      //now the real magic happens
+      /*this.$http.get(this.url + '/entities', JSON.stringify(entities)).then(function (response) {
+          this.items = JSON.parse(response.data)
+          //console.log(response)
+        }, function (response) {
+          console.log("Error Fail to get data")
+      });*/
+
     },
-    addEntity: function (e) {
+    addEntity: function (entity, e) {
       e.preventDefault()
-      if(this.newEntity==undefined || this.newEntity.length==0){
-        if(this.entities.indexOf('mockdata')==-1){
-          this.entities.push('mockdata')
-        }
-        this.currentEntity='mockdata'
-      }
-      else{
-        if(this.entities.indexOf(this.newEntity)==-1){
-          this.entities.push(this.newEntity)
-        }
-        this.currentEntity=this.newEntity
-      }
-      this.fetchData('twitter')
-      this.newEntity=''
+      this.$http.post(this.url + '/entities', JSON.stringify(entity)).then(function (response) {
+          console.log("Entity added")
+          //console.log(response)
+        }, function (response) {
+          console.log("Error Fail to get data")
+      })
+      this.loadEntities
     },
     selectEntity: function (entity, e) {
       e.preventDefault()
       //console.log(entity)
+      if(!this.selected || this.currentEntity==entity){
+        this.selected = !this.selected
+      }
       this.currentEntity = entity
-      this.fetchData('twitter')
+      if(this.selected){
+        document.getElementById("sidenav_handles").style.marginLeft = "250px"
+      }
+      else{
+        document.getElementById("sidenav_handles").style.marginLeft = "0px"
+      }
+    },
+    editEntity: function(entity, e) {
+
+    },
+    deleteEntity: function(entity, e) {
+
+    },
+    loadEntities: function() {
+      this.$http.get(this.url + '/entities').then(function (response) {
+        for(var i=0;i<response.data.length;i++){
+          this.entities = response.data
+        }
+
+          //console.log(response)
+        }, function (response) {
+          console.log("Error Fail to get data")
+      })
     },
     updateWaterfall: _.debounce(
         function() {
           this.waterfall.compose(true)
           document.getElementById("wf-container").style.visibility = "visible"
+          this.isLoading = false
         },
       1)
     }

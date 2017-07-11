@@ -21,8 +21,8 @@ hr {
 
 #main {
   transition: margin-left .5s;
-  margin-left: 300px;
-  width: calc(100% - 600px); }
+  margin-left: 250px;
+  width: calc(100% - 250px); }
 
 button {
   color: #fff;
@@ -145,38 +145,44 @@ form :-moz-placeholder {
 @media screen and (min-width: 1440px) {
   .tweets .tweet {} }
 
-.sidenav {
+.sidenav img {
+  display: block;
+  margin: 0 auto 30px;
+  height: 200px;
+  width: 200px; }
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #666;
+  display: block;
+  transition: 0.3s; }
+
+.sidenav_entities {
   height: 100%;
-  width: 300px;
+  width: 250px;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   top: 0;
   left: 0;
   background-color: #fff;
   overflow-x: hidden;
   transition: 0.5s;
   border-right: 1px solid #ccc; }
-  .sidenav img {
-    display: block;
-    margin: 0 auto 30px;
-    height: 200px;
-    width: 200px; }
-  .sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #666;
-    display: block;
-    transition: 0.3s; }
 
-.sidenav-right {
-  width: 300px;
-  min-height: 100%;
-  background-color: #fff;
+.sidenav_handles {
+  height: 100%;
+  width: 250px;
   position: fixed;
-  right: 0;
+  z-index: 1;
   top: 0;
-  border-left: 1px solid #ccc; }
+  left: 0;
+  margin-left: 0px;
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  border-right: 1px solid #ccc; }
+
 
 .filter ul {
   list-style: none;
